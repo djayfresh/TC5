@@ -215,3 +215,12 @@ pip-log.txt
 #Mr Developer
 .mr.developer.cfg
 *.xef
+
+
+#############
+## UNity
+#############
+
+temp/
+Library/
+Test_GameDeployment_Data/

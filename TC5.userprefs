@@ -1,0 +1,15 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Controllers\ShootingController.cs">
+    <Files>
+      <File FileName="Assets\Scripts\Actor\Enemy.cs" Line="128" Column="16" />
+      <File FileName="Assets\Scripts\Pathing\MoveToFrom.cs" Line="32" Column="16" />
+      <File FileName="Assets\Scripts\Controllers\ShootingController.cs" Line="155" Column="5" />
+      <File FileName="Assets\Scripts\Actor\Player.cs" Line="39" Column="4" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
