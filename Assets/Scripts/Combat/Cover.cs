@@ -35,7 +35,7 @@ public class Cover : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetKeyDown(KeyCode.RightAlt))
+		if(Input.GetButtonDown("Cover/Reload"))
 		{
 			if(OnCover != null)
 			{
@@ -43,7 +43,7 @@ public class Cover : MonoBehaviour {
 			}
 
 		}
-		else if(Input.GetKeyUp(KeyCode.RightAlt))
+		else if(Input.GetButtonUp("Cover/Reload"))
 		{
 			if(OnExitCover != null)
 			{

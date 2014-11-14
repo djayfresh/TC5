@@ -12,33 +12,38 @@ public class SoundManager : MonoBehaviour
 
 	public void playPistolSound()
 	{
-		if(sounds.Length >= 3)
+		if(sounds.Length > 3)
 			sounds [3].Play ();
 	}
 	public void playRifleSound()
 	{
-		if(sounds.Length >= 2)
+		if(sounds.Length > 2)
 			sounds [2].Play ();
 	}
 	public void playShotGunSound()
 	{
-		if(sounds.Length >= 1)
+		if(sounds.Length > 1)
 			sounds [1].Play ();
 	}
 	public void playMusic()
 	{
-		if(sounds != null)
+		if(sounds.Length >= 1)
 			sounds [0].Play ();	
 	}
 	public void playEnemyDeath()
 	{
-		if(sounds.Length >= 4)
+		if(sounds.Length > 4)
 			sounds[4].Play();
 	}
 	public void playEnemyFire()
 	{
-		if(sounds.Length >= 5)
+		if(sounds.Length > 5)
 			sounds [5].Play ();
+	}
+	public void playDryFire()
+	{
+		if (sounds.Length > 6)
+			sounds [6].Play ();
 	}
 	public void muteMusic(bool mute)
 	{

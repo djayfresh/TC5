@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class EndGameOnDestroy : MonoBehaviour {
 
@@ -11,17 +12,16 @@ public class EndGameOnDestroy : MonoBehaviour {
 
 	void OnDestroy()
 	{
-		PathedCamera player = FindObjectOfType<PathedCamera> ();
+		Player player = FindObjectOfType<Player> ();
 		SceneInfo si = FindObjectOfType<SceneInfo> ();
 		if(player != null && si != null)
 		{
-			si.recordInfo (-1, player.score, player.health);
+			si.recordInfo (player.getAccuracy(), player.score, player.getHeadShots());
 		}
 		else if(si != null)
 		{
 			si.recordInfo(-1, 9001, -1);
 		}
-		Debug.Log ("Object Destroyed");
 		Application.LoadLevel("Credits");
 	}
 }

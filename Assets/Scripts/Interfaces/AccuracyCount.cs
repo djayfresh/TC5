@@ -2,11 +2,10 @@
 using System.Collections;
 using System;
 
-
 public class AccuracyCount : MonoBehaviour
 {
     private SceneInfo gameUser;
-    private float accuracyCount = 0;
+    private float accuracyCount;
     private int screenWidth;
     private int screenHeight;
     private float AccuracyCountWidthLocation, AccuracyCountHeightLocation;
@@ -15,8 +14,11 @@ public class AccuracyCount : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        gameUser = FindObjectOfType<SceneInfo>();
-        accuracyCount = gameUser.Accuracy;
+		gameUser = FindObjectOfType<SceneInfo>();
+		if(gameUser == null)
+		{
+			gameUser = new SceneInfo() {Accuracy = -9001, LivesLeft = 9001, Score = -11};
+		}
         screenWidth = Screen.width;
         screenHeight = Screen.height;
     }
@@ -29,7 +31,7 @@ public class AccuracyCount : MonoBehaviour
         AccuracyCountWidthLocation = (screenWidth/3);
         AccuracyCountHeightLocation = (screenHeight) - ((screenHeight / 2));
         accuracyCount = gameUser.Accuracy;
-        playerAccuracyCountText = String.Format("{0:0.}", accuracyCount);
+        playerAccuracyCountText = String.Format("{0:0.}", accuracyCount) + "%";
 
     }
 

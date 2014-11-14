@@ -4,7 +4,8 @@ using System.Collections;
 public class ReticleMovement : MonoBehaviour
 {
 	public ControllerKinect kinect;
-	private bool debugMouse = false;
+	public bool debugMouse = false;
+	public float marginOfError = .05f;
 	private Vector2 localPositon;
 	private Vector2 positonCenter;
 	public Texture crosshair;
@@ -13,7 +14,7 @@ public class ReticleMovement : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-		//Screen.showCursor = false;
+		Screen.showCursor = false;
 		WaitScript.onTextShow += showCrosshair;
 		updatePositionCenter();
 	}
@@ -35,12 +36,13 @@ public class ReticleMovement : MonoBehaviour
 
 	public void setPosition(Vector2 pos)
 	{
-        localPositon = pos;
+		if((pos - localPositon).magnitude > marginOfError)
+        	localPositon = pos;
 	}
 
 	public Vector2 getScreenPositionCentered()
 	{
-			return localPositon;
+		return localPositon;
 	}
 	void updatePositionCenter()
 	{

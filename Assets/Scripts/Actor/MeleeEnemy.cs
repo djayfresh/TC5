@@ -16,6 +16,9 @@ public class MeleeEnemy : Enemy
 	
 	void Update () 
 	{
+		if (health != maxHealth)
+			HealthBar.localScale = new Vector3 (0.0033f * health / maxHealth, .0033f, .0033f);
+
 		float distanceFromPlayer = (player.transform.position - transform.position).magnitude;
 
 		if(distanceFromPlayer < meleeRange && timefromLastShot > weapon.fireRate)

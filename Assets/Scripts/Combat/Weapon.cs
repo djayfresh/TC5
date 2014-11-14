@@ -12,6 +12,7 @@ public class Weapon : MonoBehaviour
 	public static int INFINITE_AMMO = -1;
     public int maxClipSize;
     public int clipRemaining;
+	public float headShotMultiplier = 2;
 
 	protected float activeLength = 1;
 	protected float flashLength = .5f;
@@ -25,7 +26,7 @@ public class Weapon : MonoBehaviour
 
 	public int numBulletsFired()
 	{
-		return initalAmmo - Ammo;
+		return initalAmmo - (Ammo + clipRemaining);
 	}
 	public void Update()
 	{
@@ -35,14 +36,22 @@ public class Weapon : MonoBehaviour
 
 	public void reload()
 	{
-		if(Ammo != INFINITE_AMMO)
+		if(Ammo > 0 && (clipRemaining != maxClipSize || clipRemaining != Ammo))
 		{
-			Ammo -= maxClipSize - clipRemaining;
-			clipRemaining = Mathf.Min(Ammo, maxClipSize);
-		
+			int reloadAmmo = Mathf.Min(maxClipSize, Ammo + clipRemaining);
+			Ammo = (Ammo - reloadAmmo) + clipRemaining;
+			clipRemaining = reloadAmmo;
 		}
-		else
+		else if(Ammo == INFINITE_AMMO && clipRemaining != maxClipSize)
+		{
+			initalAmmo += maxClipSize - clipRemaining;
 			clipRemaining = maxClipSize;
+		}
+	}
+
+	public bool outOfAmmo()
+	{
+		return Ammo == 0 && clipRemaining == 0;
 	}
 
 	public void showFlash()

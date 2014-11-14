@@ -15,6 +15,10 @@ public class EndShotsFired : MonoBehaviour
     void Start()
     {
         gameUser = FindObjectOfType<SceneInfo>();
+		if(gameUser == null)
+		{
+			gameUser = new SceneInfo() {Accuracy = 0, LivesLeft = 9001, Score = -11};
+		}
         shotsFired = gameUser.Score;
         screenWidth = Screen.width;
         screenHeight = Screen.height;

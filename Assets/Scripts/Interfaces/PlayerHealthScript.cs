@@ -4,7 +4,7 @@ using System;
 
 public class PlayerHealthScript : MonoBehaviour {
     private Player gameUser;
-    private int playerHealthRemaining;
+    private float playerHealthRemaining;
     private int screenWidth;
     private int screenHeight;
     private float healthRemainingWidthLocation, healthRemainingHeightLocation;

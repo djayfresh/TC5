@@ -21,15 +21,24 @@ public class Enemy : Actor
 	protected Player playerClass;
 	protected SoundManager sm;
 	protected BoxCollider headCollider;
+	protected Transform HealthBar;
 	// Use this for initialization
 	void Start () 
 	{
+		maxHealth = health;
 		Cover.OnCover += OnCover;
 		Cover.OnExitCover += OnExit;
 		mtf = GetComponent<MoveToFrom> ();
 		player = Camera.main.gameObject;
 		playerClass = player.GetComponent<Player> ();
 		sm = FindObjectOfType<SoundManager> ();
+
+		foreach(Transform t in transform)
+		{
+			if(t.name == "HealthBar")
+				HealthBar = t;
+		}
+		HealthBar.localScale = Vector3.zero;
 		findHeadCollider();
 	}
 
@@ -75,6 +84,9 @@ public class Enemy : Actor
 	// Update is called once per frame
 	void Update () 
 	{
+		if(health != maxHealth)
+			HealthBar.localScale = new Vector3(0.0033f * health/maxHealth,.0033f,.0033f);
+		
 		if(weapon != null && weapon.bullet != null)
 		{
 

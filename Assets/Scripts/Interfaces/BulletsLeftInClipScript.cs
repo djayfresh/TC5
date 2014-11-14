@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System;
 
@@ -18,6 +18,11 @@ public class BulletsLeftInClipScript : MonoBehaviour {
 		screenWidth = Screen.width;
 		screenHeight = Screen.height;
         gameUser = FindObjectOfType<Player>();
+		if(gameUser == null)
+		{
+			gameUser = new Player() {weapons = new Weapon[1]};
+			gameUser.weapons[0] = new Weapon() {clipRemaining = 9001};
+		}
         bulletsInClip = gameUser.getWeapon().clipRemaining;
 	}
 	
@@ -26,19 +31,25 @@ public class BulletsLeftInClipScript : MonoBehaviour {
     {
         screenWidth = Screen.width;
         screenHeight = Screen.height;
-        scoreWidthPosition = screenWidth / 8;
-        scoreHeightPosition = screenHeight - screenHeight / 5;
+        scoreWidthPosition = screenWidth / 4;
+        scoreHeightPosition = screenHeight - (screenHeight / 8);
 		bulletsInClip = gameUser.getWeapon().clipRemaining;
+		int ammo = gameUser.getWeapon().Ammo;
 		bulletsLeftText = String.Format("{0:0.}", bulletsInClip);
+		if(ammo >= 0)
+		{
+			bulletsLeftText += "/" + String.Format("{0:0.}", ammo);
+		}
 	}
 
     void OnGUI()
     {
         GUIStyle myStyle = new GUIStyle();
-        myStyle.fontSize = screenHeight / 5;
+		myStyle.fontSize = (screenHeight / 5) - bulletsLeftText.Length * 5;
+		myStyle.alignment = TextAnchor.MiddleCenter;
         myStyle.normal.textColor = Color.magenta;
         GUI.Label(
-            new Rect(scoreWidthPosition, scoreHeightPosition, screenWidth, screenHeight),
+			new Rect(0, Screen.height - myStyle.fontSize, scoreWidthPosition, myStyle.fontSize),
             bulletsLeftText,
             myStyle);
     }

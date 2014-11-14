@@ -3,11 +3,12 @@ using System.Collections;
 
 public abstract class Actor : MonoBehaviour {
 
-	public int health;
+	public float health;
 	public bool inCover = false;
 	public abstract void OnDeath();
-
-	public void ApplyDamage(int damage)
+	protected float maxHealth;
+	
+	public void ApplyDamage(float damage)
 	{
 		if(!inCover)
 		{

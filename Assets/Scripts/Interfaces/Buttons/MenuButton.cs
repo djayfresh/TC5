@@ -7,57 +7,98 @@ public class MenuButton : MonoBehaviour {
 	public delegate void buttonPress(MenuButton button);
 	public static event buttonPress OnButtonPress;
 
-	public ControllerKinect kinect;
 	public ReticleMovement retical;
 	public Texture buttonTexture;
-	private GUIElement button;
-	private Vector2 buttonSize;
-	private Rect screenButton;
-	private float buttonCountDown;
 	public int countDownTime;
-
-	// Use this for initialization
+	public string label = "";
+	public Rect buttonSize;
+	protected Vector2 buttonDimensions;
+	protected Rect screenButton;
+	protected float buttonCountDown;
+	protected bool buttonHeld = false;
 	void Start () {
-		buttonSize = new Vector2(Screen.width/3, Screen.height/8);
-		screenButton = new Rect((Screen.width/2) - buttonSize.x/2, buttonSize.y/2 + Screen.height/2, buttonSize.x, buttonSize.y);
+		scaleButton();
 	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
-		buttonSize = new Vector2(Screen.width/3, Screen.height/8);
-		screenButton = new Rect((Screen.width/2) - buttonSize.x/2, buttonSize.y/2 + Screen.height/2, buttonSize.x, buttonSize.y);
 
-		Vector2 guiSpace = new Vector2(retical.getScreenPositionCentered().x, Screen.height - retical.getScreenPositionCentered().y);
-		if(screenButton.Contains(guiSpace))
+	void scaleButton()
+	{
+		if(buttonSize.x == 0 || buttonSize.y == 0 || buttonSize.width == 0 || buttonSize.height == 0)
 		{
-			buttonCountDown -= Time.deltaTime;
-			if(buttonCountDown <= 0)
-			{
-				Debug.Log("Button Countdown");
-				if(OnButtonPress != null)
-				{
-					OnButtonPress(this);
-				}
-				buttonCountDown = countDownTime;
-			}
+			buttonDimensions = new Vector2(Screen.width/3, Screen.height/8);
+			screenButton = new Rect((Screen.width/2) - buttonDimensions.x/2, buttonDimensions.y/2 + Screen.height/2, buttonDimensions.x, buttonDimensions.y);
 		}
 		else
 		{
+			screenButton = new Rect(Screen.width * buttonSize.x, Screen.height * buttonSize.y, Screen.width * buttonSize.width, Screen.height * buttonSize.height);
+		}
+	}
+	// Update is called once per frame
+	void Update () 
+	{
+		updateButtonState();
+	}
+
+	protected virtual void updateButtonState()
+	{
+		scaleButton();
+		Vector2 guiSpace = new Vector2(retical.getScreenPositionCentered().x, Screen.height - retical.getScreenPositionCentered().y);
+		if(screenButton.Contains(guiSpace))
+		{
+			onEntry();
+		}
+		else
+		{
+			onExit();
+		}
+	}
+
+	protected virtual void onEntry()
+	{
+		buttonCountDown -= Time.deltaTime;
+		buttonHeld = true;
+		if(buttonCountDown <= 0)
+		{
+			Debug.Log("Button Countdown");
+			fireEvent();
 			buttonCountDown = countDownTime;
 		}
 	}
 
+	protected virtual void fireEvent()
+	{
+		if(OnButtonPress != null)
+		{
+			OnButtonPress(this);
+		}
+	}
+
+	protected virtual void onExit()
+	{
+		buttonHeld = false;
+		buttonCountDown = countDownTime;
+	}
+
 	void OnGUI()
 	{
-		GUIStyle myStyle = new GUIStyle();
-		myStyle.fontSize = Screen.height / 5;
-		myStyle.normal.textColor = Color.white;
 		GUI.depth = 1;
+
+		GUIStyle myStyle = new GUIStyle();
+		myStyle.alignment = TextAnchor.MiddleCenter;
+		myStyle.fontSize = (int)screenButton.height;
+		myStyle.normal.textColor = Color.white;
+
 		GUI.DrawTexture(screenButton, buttonTexture, ScaleMode.StretchToFill, false);
-		if(buttonCountDown < countDownTime)
+
+		GUIStyle menuButtonLabelStyle = GUI.skin.GetStyle("Label");
+		menuButtonLabelStyle.alignment = TextAnchor.MiddleCenter;
+		menuButtonLabelStyle.fontSize = (int)screenButton.height;
+		menuButtonLabelStyle.normal.textColor = Color.black;
+		
+		GUI.Label(screenButton, label, menuButtonLabelStyle);
+	
+		if(buttonHeld)
 		{
-			GUI.Label(new Rect(screenButton.x + (screenButton.width/2) - myStyle.fontSize/2, screenButton.y - myStyle.fontSize/4, screenButton.width, screenButton.height), String.Format("{0:0.}", buttonCountDown), myStyle);
+			GUI.Label(screenButton, String.Format("{0:0.}", buttonCountDown), myStyle);
 		}
 	}
 }

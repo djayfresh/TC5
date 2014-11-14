@@ -102,10 +102,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f3cf973742756b47a6ca4bc1ef6b11c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  kinect: {fileID: 295782373}
   retical: {fileID: 750765856}
-  buttonTexture: {fileID: 2800000, guid: 12baa689f53495a4699478d60b6d1242, type: 3}
+  buttonTexture: {fileID: 2800000, guid: 08d7a522b53a91f43b42470e86023c29, type: 3}
   countDownTime: 3
+  label: Start Game
+  buttonSize:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
 --- !u!4 &241603201
 Transform:
   m_ObjectHideFlags: 0
@@ -146,6 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fafbbbf43058bb64a80f6cab09c3b100, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  phizFactor: .899999976
 --- !u!4 &295782374
 Transform:
   m_ObjectHideFlags: 0
@@ -256,6 +263,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   kinect: {fileID: 295782373}
+  debugMouse: 1
+  marginOfError: .0500000007
   crosshair: {fileID: 2800000, guid: c41eb339ce3988b42a7fa0efe0e2e463, type: 3}
   scaleFactor: .300000012
 --- !u!114 &750765857
@@ -271,7 +280,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   kinect: {fileID: 295782373}
   canShoot: 1
-  explosion: {fileID: 0}
+  enemyHitEffect: {fileID: 0}
+  enemyMissEffect: {fileID: 0}
+  showPistol: {fileID: 0}
 --- !u!1001 &766437032
 Prefab:
   m_ObjectHideFlags: 0
@@ -370,7 +381,11 @@ Prefab:
     - target: {fileID: 11400000, guid: bd776f6927cc3534599455a8ef080be4, type: 2}
       propertyPath: buttonTexture
       value: 
-      objectReference: {fileID: 2800000, guid: 12baa689f53495a4699478d60b6d1242, type: 3}
+      objectReference: {fileID: 2800000, guid: 08d7a522b53a91f43b42470e86023c29, type: 3}
+    - target: {fileID: 11400000, guid: bd776f6927cc3534599455a8ef080be4, type: 2}
+      propertyPath: label
+      value: Start Game
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bd776f6927cc3534599455a8ef080be4, type: 2}
   m_RootGameObject: {fileID: 241603199}

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class PathedCamera : Player {
@@ -28,9 +28,9 @@ public class PathedCamera : Player {
 
 	void PlayerCover(Cover cover)
 	{
-		if(weapon[currentWeapon] != null)
+		if(weapons[currentWeapon] != null)
 		{
-			weapon[currentWeapon].reload();
+			weapons[currentWeapon].reload();
 		}
 		if(activeCover != cover && currentDestination < destinations.Length)
 		{

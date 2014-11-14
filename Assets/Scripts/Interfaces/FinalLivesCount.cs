@@ -14,7 +14,11 @@ public class FinalLivesCount : MonoBehaviour
 	// Use this for initialization
 	void Start () 
     {
-        gameUser = FindObjectOfType<SceneInfo>();
+		gameUser = FindObjectOfType<SceneInfo>();
+		if(gameUser == null)
+		{
+			gameUser = new SceneInfo() {Accuracy = 0, LivesLeft = 9001, Score = -11};
+		}
         playerHealthRemaining = gameUser.LivesLeft;
         screenWidth = Screen.width;
         screenHeight = Screen.height;

@@ -16,6 +16,8 @@ public class ControllerKinect : MonoBehaviour {
 	public delegate void HandOutOfPhiz(Body body, JointType hand);
 	public static event HandOutOfPhiz playerHandLeftPhiz;
 
+    public float phizFactor = .9f;
+
 	private float shoulderDist;
 	private float aspectRatioX;
 
@@ -71,9 +73,9 @@ public class ControllerKinect : MonoBehaviour {
 		CameraSpacePoint shoulderLeftCS = body.Joints [JointType.ShoulderLeft].Position;
 		CameraSpacePoint shoulderRightCS = body.Joints [JointType.ShoulderRight].Position;
 		CameraSpacePoint handCS = body.Joints [handType].Position;
-		float deltaShoulderDist = new Vector2 (shoulderRightCS.X - shoulderLeftCS.X, shoulderRightCS.Y - shoulderLeftCS.Y).magnitude;
+		float deltaShoulderDist = new Vector2 (shoulderRightCS.X - shoulderLeftCS.X, shoulderRightCS.Y - shoulderLeftCS.Y).magnitude * phizFactor;
 
-		if (shoulderDist == 0 || deltaShoulderDist > shoulderDist) 
+		if (shoulderDist == 0 || (deltaShoulderDist != shoulderDist)) 
 		{
 			shoulderDist = deltaShoulderDist;
 			//Debug.Log ("Shoulder Distance: " + shoulderDist);
@@ -81,7 +83,9 @@ public class ControllerKinect : MonoBehaviour {
 
 		float width = shoulderDist * aspectRatioX;
 		float height = shoulderDist;
-		float boxRelativeToShoulder = handType == JointType.HandRight ? shoulderDist / 2 : -(shoulderDist / 2);
+		
+        float boxRelativeToShoulder = handType == JointType.HandRight ? shoulderDist / 2 : -(shoulderDist / 4);
+
 		Rect playerBox = new Rect (neckCS.X - width / 2 + boxRelativeToShoulder, (neckCS.Y - (height) / 2), width, height);
 		hand = new Vector2 (handCS.X, handCS.Y);
 		return playerBox;
