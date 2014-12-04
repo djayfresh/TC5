@@ -1,11 +1,12 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Controllers\ShootingController.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Interfaces\WeaponChangeText.cs">
     <Files>
-      <File FileName="Assets\Scripts\Actor\Enemy.cs" Line="128" Column="16" />
-      <File FileName="Assets\Scripts\Pathing\MoveToFrom.cs" Line="32" Column="16" />
-      <File FileName="Assets\Scripts\Controllers\ShootingController.cs" Line="155" Column="5" />
-      <File FileName="Assets\Scripts\Actor\Player.cs" Line="39" Column="4" />
+      <File FileName="Assets\Scripts\Actor\WeaponShooter.cs" Line="8" Column="23" />
+      <File FileName="Assets\Scripts\Controllers\ShootingController.cs" Line="72" Column="5" />
+      <File FileName="Assets\Scripts\Actor\DestroyTrigger.cs" Line="12" Column="4" />
+      <File FileName="Assets\Scripts\Actor\WeaponPickup.cs" Line="17" Column="28" />
+      <File FileName="Assets\Scripts\Interfaces\WeaponChangeText.cs" Line="66" Column="40" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

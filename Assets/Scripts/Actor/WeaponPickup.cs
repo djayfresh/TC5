@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class WeaponPickup: MonoBehaviour {
@@ -7,6 +7,7 @@ public class WeaponPickup: MonoBehaviour {
 	public Weapon weapon;
 	public Player player;
 	public GameObject[] destoryList;
+
 	// Use this for initialization
 	void Start () {
 		ActionTrigger.OnTrigger += OnTrigger;
@@ -27,6 +28,7 @@ public class WeaponPickup: MonoBehaviour {
 
 	public void destory()
 	{
+		ActionTrigger.OnTrigger -= OnTrigger;
 		foreach(GameObject g in destoryList)
 		{
 			Destroy(g);

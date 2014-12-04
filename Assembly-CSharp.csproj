@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+	<ProductVersion>10.0.20506</ProductVersion>
+	<SchemaVersion>2.0</SchemaVersion>
+	<ProjectGuid>{E350A343-7EBD-ABF2-0768-DA00B11C3273}</ProjectGuid>
+	<OutputType>Library</OutputType>
+	<AppDesignerFolder>Properties</AppDesignerFolder>
+	<RootNamespace></RootNamespace>
+	<AssemblyName>Assembly-CSharp</AssemblyName>
+	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+	<FileAlignment>512</FileAlignment>
+	<BaseDirectory>Assets</BaseDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+	<DebugSymbols>true</DebugSymbols>
+	<DebugType>full</DebugType>
+	<Optimize>false</Optimize>
+	<OutputPath>Temp\bin\Debug\</OutputPath>
+	<DefineConstants>DEBUG;TRACE;UNITY_4_5_4;UNITY_4_5;UNITY_STANDALONE_WIN;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;UNITY_STANDALONE;ENABLE_MONO;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_WP8SUPPORT;ENABLE_MOVIES;ENABLE_WWW;ENABLE_IMAGEEFFECTS;INCLUDE_WP_BLUE_SUPPORT;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_DUCK_TYPING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE;UNITY_PRO_LICENSE</DefineConstants>
+	<ErrorReport>prompt</ErrorReport>
+	<WarningLevel>4</WarningLevel>
+	<NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+	<DebugType>pdbonly</DebugType>
+	<Optimize>true</Optimize>
+	<OutputPath>Temp\bin\Release\</OutputPath>
+	<DefineConstants>TRACE</DefineConstants>
+	<ErrorReport>prompt</ErrorReport>
+	<WarningLevel>4</WarningLevel>
+	<NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+	<Reference Include="System" />
+    <Reference Include="System.XML" />
+	<Reference Include="System.Core" />
+	<Reference Include="System.Xml.Linq" />
+	<Reference Include="UnityEngine">
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	</Reference>
+	<Reference Include="UnityEditor">
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	</Reference>
+  </ItemGroup>
+  <ItemGroup>
+     <Compile Include="Assets\CameraTest\ColorSourceManager.cs" />
+     <Compile Include="Assets\CameraTest\ColorSourceView.cs" />
+     <Compile Include="Assets\CameraTest\InstructionLogic.cs" />
+     <Compile Include="Assets\Scripts\Actor\ActionTrigger.cs" />
+     <Compile Include="Assets\Scripts\Actor\Actor.cs" />
+     <Compile Include="Assets\Scripts\Actor\DestroyTrigger.cs" />
+     <Compile Include="Assets\Scripts\Actor\DestructableActor.cs" />
+     <Compile Include="Assets\Scripts\Actor\Enemy.cs" />
+     <Compile Include="Assets\Scripts\Actor\MeleeEnemy.cs" />
+     <Compile Include="Assets\Scripts\Actor\Player.cs" />
+     <Compile Include="Assets\Scripts\Actor\WeaponPickup.cs" />
+     <Compile Include="Assets\Scripts\Actor\WeaponShooter.cs" />
+     <Compile Include="Assets\Scripts\Combat\Bullet.cs" />
+     <Compile Include="Assets\Scripts\Combat\Cover.cs" />
+     <Compile Include="Assets\Scripts\Combat\CoverTypes.cs" />
+     <Compile Include="Assets\Scripts\Combat\HandCannon.cs" />
+     <Compile Include="Assets\Scripts\Combat\MachineGun.cs" />
+     <Compile Include="Assets\Scripts\Combat\RocketLauncher.cs" />
+     <Compile Include="Assets\Scripts\Combat\Sword.cs" />
+     <Compile Include="Assets\Scripts\Combat\Sword_Katana.cs" />
+     <Compile Include="Assets\Scripts\Combat\Weapon.cs" />
+     <Compile Include="Assets\Scripts\Controllers\ControllerKinect.cs" />
+     <Compile Include="Assets\Scripts\Controllers\DisplayWaitTextOnDestroy.cs" />
+     <Compile Include="Assets\Scripts\Controllers\DisplayWeaponChangeText.cs" />
+     <Compile Include="Assets\Scripts\Controllers\EndGameOnDestroy.cs" />
+     <Compile Include="Assets\Scripts\Controllers\HideWaitTextOnDestroy.cs" />
+     <Compile Include="Assets\Scripts\Controllers\ReloadScript.cs" />
+     <Compile Include="Assets\Scripts\Controllers\SceneInfo.cs" />
+     <Compile Include="Assets\Scripts\Controllers\ShootingController.cs" />
+     <Compile Include="Assets\Scripts\Controllers\SoundManager.cs" />
+     <Compile Include="Assets\Scripts\Explosions\Explosion.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\AccuracyCount.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\ActionPNGScript.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\BulletsLeftInClipScript.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\Buttons\HoldTimeButton.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\Buttons\MenuButton.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\CreditsInfo.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\EndShotsFired.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\FinalLivesCount.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\LevelLoader\LevelLoadOnButton.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\LevelLoader\LevelLoader.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\PaintingScroller.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\PlayerHealthScript.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\TimerScript.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\WaitScript.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\WeaponChangeText.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\gameOptionsScript.cs" />
+     <Compile Include="Assets\Scripts\Pathing\CameraNode.cs" />
+     <Compile Include="Assets\Scripts\Pathing\MoveAlongPath.cs" />
+     <Compile Include="Assets\Scripts\Pathing\MoveToFrom.cs" />
+     <Compile Include="Assets\Scripts\Pathing\PathNode.cs" />
+     <Compile Include="Assets\Scripts\Pathing\PathedCamera.cs" />
+     <Compile Include="Assets\Scripts\Pathing\ReticleMovement.cs" />
+     <Compile Include="Assets\gameOverOptionsScript.cs" />
+     <None Include="Assets\Model\Character\MikuRig 1.1\readme.txt" />
+     <None Include="Assets\Skymap\readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{26D96906-FBDD-13BB-C5CE-66BA4CC2A57E}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+	   Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  
+</Project>

@@ -19,11 +19,15 @@ public class MeleeEnemy : Enemy
 		if (health != maxHealth)
 			HealthBar.localScale = new Vector3 (0.0033f * health / maxHealth, .0033f, .0033f);
 
-		float distanceFromPlayer = (player.transform.position - transform.position).magnitude;
+		float distanceFromPlayer = (Camera.main.transform.position - transform.position).magnitude;
 
 		if(distanceFromPlayer < meleeRange && timefromLastShot > weapon.fireRate)
 		{
-			playerClass.SendMessage("ApplyDamage",5,SendMessageOptions.DontRequireReceiver);
+			Player.player1.SendMessage("ApplyDamage",5,SendMessageOptions.DontRequireReceiver);
+			if(Player.player2 != null)
+			{
+				Player.player1.SendMessage("ApplyDamage",5,SendMessageOptions.DontRequireReceiver);
+			}
 			timefromLastShot = 0;
 		}
 		timefromLastShot += Time.deltaTime;

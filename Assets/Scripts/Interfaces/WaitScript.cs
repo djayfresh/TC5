@@ -2,6 +2,9 @@
 using System.Collections;
 
 public class WaitScript : MonoBehaviour {
+	
+	public delegate void WaitTextActive(bool show);
+	public static event WaitTextActive onTextShow;
 
     private float screenHeight;
     private float screenWidth;
@@ -11,9 +14,6 @@ public class WaitScript : MonoBehaviour {
     public Texture waitTexture;
     private bool desplayWait = false;
 	private ShootingController userFireController;
-	
-	public delegate void WaitTextActive(bool show);
-	public static event WaitTextActive onTextShow;
 
 	void Start () {
 		screenWidth = Screen.width;

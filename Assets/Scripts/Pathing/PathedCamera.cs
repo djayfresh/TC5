@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class PathedCamera : Player {
+public class PathedCamera : MonoBehaviour {
 
 	public CameraNode[] destinations;
 	int currentDestination;
@@ -10,28 +10,33 @@ public class PathedCamera : Player {
 	private float coverLerpSpeed;
 	private bool canCover;
 	private float lerpSpeed;
+	public Camera camera;
 	// Use this for initialization
 	void Start () {
 		currentDestination = 0;
-		transform.rotation = destinations [currentDestination].camera.transform.rotation;
-		transform.position = destinations [currentDestination].transform.position;
-		lerpSpeed = destinations[currentDestination].lerpSpeed;
+		if(destinations.Length > 0)
+		{
+			transform.rotation = destinations [currentDestination].camera.transform.rotation;
+			transform.position = destinations [currentDestination].transform.position;
+			lerpSpeed = destinations[currentDestination].lerpSpeed;
+		}
 		activeCover = null;
 		canCover = false;
-		inCover = false;
 		coverLerpSpeed = 1;
+		camera = GetComponent<Camera>();
 
 		Cover.OnCover += PlayerCover;
+		Cover.OnCover += keyPressCover;
 		Cover.OnExitCover += PlayerLeftCover;
-
 	}
 
-	void PlayerCover(Cover cover)
+	void keyPressCover(Player player, Cover cover)
 	{
-		if(weapons[currentWeapon] != null)
-		{
-			weapons[currentWeapon].reload();
-		}
+		PlayerCover(player, cover);
+	}
+
+	void PlayerCover(Player activePlayer, Cover cover)
+	{
 		if(activeCover != cover && currentDestination < destinations.Length)
 		{
 			for(int i = 0; i < destinations[currentDestination].cover.Length; i++)
@@ -40,18 +45,18 @@ public class PathedCamera : Player {
 				if(hasCover == cover)
 				{
 					activeCover = cover;
-					inCover = true;
+					setPlayerCover(true);
 				}
 			}
 		}
 	}
 
-	void PlayerLeftCover(Cover cover)
+	void PlayerLeftCover(Player activePlayer, Cover cover)
 	{
+		setPlayerCover(false);
 		if(activeCover == cover)
 		{
 			activeCover = null;
-			inCover = false;
 		}
 	}
 	
@@ -73,11 +78,10 @@ public class PathedCamera : Player {
 			}
 			if(dist > DISTANCE_BUFFER)
 			{
-				inCover = true;
 				transform.position = Vector3.MoveTowards(transform.position, pos, Time.deltaTime * lerpSpeed * coverLerpSpeed);
 				//transform.position = Vector3.Lerp(initalPos, pos, lerpTime);
 			}
-			Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, activeCover.camera.fieldOfView, Time.deltaTime * lerpSpeed * coverLerpSpeed);
+			camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, activeCover.camera.fieldOfView, Time.deltaTime * lerpSpeed * coverLerpSpeed);
 		}
 		else if(currentDestination < destinations.Length)
 		{
@@ -85,24 +89,25 @@ public class PathedCamera : Player {
 			Vector3 pos = destinations [currentDestination].transform.position;
 			float dist = Vector3.Distance (pos, this.transform.position);
 			float rot = Quaternion.Angle(transform.rotation, destinations[currentDestination].camera.transform.rotation);
-			Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, destinations[currentDestination].camera.fieldOfView, Time.deltaTime * lerpSpeed * coverLerpSpeed);
+			camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, destinations[currentDestination].camera.fieldOfView, Time.deltaTime * lerpSpeed * coverLerpSpeed);
 
 			if(rot != 0) //Possibliy broken
 			{
 				transform.rotation = Quaternion.Lerp(transform.rotation, 
 				                                     destinations[currentDestination].camera.transform.rotation, 
-				                                     Time.deltaTime * lerpSpeed * coverLerpSpeed);
+				                                     Time.deltaTime * destinations[currentDestination].rotationLerpSpeed * coverLerpSpeed);
 			}
 			if(dist > DISTANCE_BUFFER)
 			{
-				inCover = true;
+				
+				setPlayerCover(true);
 				transform.position = Vector3.MoveTowards(transform.position, pos, Time.deltaTime * lerpSpeed * coverLerpSpeed);
 			}
 			else
 			{
 				canCover = true;
 				
-				inCover = false;
+				setPlayerCover(false);
 				if(destinations[currentDestination].move())
 				{
 					canCover = false;
@@ -114,9 +119,19 @@ public class PathedCamera : Player {
 		}
 	}
 
+	void setPlayerCover(bool inCover)
+	{
+		Player.player1.inCover = inCover;
+		if(Player.player2 != null)
+		{
+			Player.player2.inCover = inCover;
+		}
+	}
+
 	void OnDestroy()
 	{
 		Cover.OnCover -= PlayerCover;
+		Cover.OnCover -= keyPressCover;
 		Cover.OnExitCover -= PlayerLeftCover;
 	}
 }

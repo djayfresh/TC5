@@ -4,11 +4,14 @@ using Windows.Kinect;
 
 public class Cover : MonoBehaviour {
 	
-	public delegate void PlayerCover(Cover cover);
+	public delegate void PlayerCover(Player player, Cover cover);
 	public static event PlayerCover OnCover;
 
-	public delegate void PlayerLeaveCover(Cover cover);
+	public delegate void PlayerLeaveCover(Player player, Cover cover);
 	public static event PlayerLeaveCover OnExitCover;
+
+	private Player trackedPlayer;
+	private bool trackingTwoPlayer;
 
 	public float lerpSpeed = 4;
 	// Use this for initialization
@@ -17,19 +20,41 @@ public class Cover : MonoBehaviour {
 		ControllerKinect.playerHandInPhiz += playerLeaveCover;
 	}
 
-	void playerEnteredCover(Body body, JointType hand)
+	void playerEnteredCover(Player activePlayer, Body body, JointType hand)
 	{
-		if(OnCover != null)
+		if(trackedPlayer == null && !trackingTwoPlayer)
 		{
-			OnCover(this);
+			trackedPlayer = activePlayer;
+		}
+		if(trackedPlayer != null && !trackedPlayer.Equals(activePlayer))
+		{
+			trackingTwoPlayer = activePlayer.tracked;
+		}
+
+		if(trackingTwoPlayer || MissingTrackedPlayer())
+		{
+			if(OnCover != null)
+			{
+				OnCover(activePlayer, this);
+			}
 		}
 	}
 
-	void playerLeaveCover(Body body, JointType hand, Vector2 handPos)
+	bool MissingTrackedPlayer()
 	{
-		if(OnExitCover != null)
+		return Player.numPlayers == 1 || (Player.player1.tracked && !Player.player2.tracked) || (!Player.player1.tracked && Player.player2.tracked);
+	}
+
+	void playerLeaveCover(Player activePlayer, Body body, JointType hand, Vector2 handPos)
+	{
+		if(trackingTwoPlayer || MissingTrackedPlayer())
 		{
-			OnExitCover(this);
+			trackedPlayer = null;
+			trackingTwoPlayer = false;
+			if(OnExitCover != null)
+			{
+				OnExitCover(activePlayer, this);
+			}
 		}
 	}
 	
@@ -39,7 +64,7 @@ public class Cover : MonoBehaviour {
 		{
 			if(OnCover != null)
 			{
-				OnCover(this);
+				OnCover(null, this);
 			}
 
 		}
@@ -47,8 +72,14 @@ public class Cover : MonoBehaviour {
 		{
 			if(OnExitCover != null)
 			{
-				OnExitCover(this);
+				OnExitCover(null, this);
 			}
 		}
+	}
+
+	void Destroy()
+	{
+		ControllerKinect.playerHandLeftPhiz -= playerEnteredCover;
+		ControllerKinect.playerHandInPhiz -= playerLeaveCover;
 	}
 }

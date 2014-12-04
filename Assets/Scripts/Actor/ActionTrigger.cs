@@ -14,7 +14,7 @@ public class ActionTrigger : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other)
 	{
-		if(other == onCollideWith && OnTrigger != null)
+		if(other == onCollideWith && OnTrigger != null && !notifyOnExit)
 		{
 			Debug.Log("Trigger Volumn Hit");
 			OnTrigger(this);

@@ -12,6 +12,7 @@ public class CameraNode : MonoBehaviour {
 	public GameObject[] eneimes;
 	public GameObject[] despawnList;
 	public float lerpSpeed;
+	public float rotationLerpSpeed = 1;
 
 	public ActionTrigger triggerVolumn;
 	// Use this for initialization
@@ -83,7 +84,7 @@ public class CameraNode : MonoBehaviour {
 				}
 	}
 
-	void OnDestory()
+	void OnDestroy()
 	{
 		ActionTrigger.OnTrigger -= volumnCollide;
 	}

@@ -4,7 +4,7 @@ using System;
 
 public class EndGameOnDestroy : MonoBehaviour {
 
-
+	public int nextLevel;
 	// Use this for initialization
 	void Start () {
 		
@@ -12,16 +12,7 @@ public class EndGameOnDestroy : MonoBehaviour {
 
 	void OnDestroy()
 	{
-		Player player = FindObjectOfType<Player> ();
-		SceneInfo si = FindObjectOfType<SceneInfo> ();
-		if(player != null && si != null)
-		{
-			si.recordInfo (player.getAccuracy(), player.score, player.getHeadShots());
-		}
-		else if(si != null)
-		{
-			si.recordInfo(-1, 9001, -1);
-		}
+		GameController.controller.nextLevel = nextLevel;
 		Application.LoadLevel("Credits");
 	}
 }

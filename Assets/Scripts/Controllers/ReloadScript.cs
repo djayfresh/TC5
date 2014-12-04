@@ -14,17 +14,32 @@ public class ReloadScript : MonoBehaviour {
 
     void Start()
     {
-        screenWidth = Screen.width;
-        screenHeight = Screen.height;
-        user = FindObjectOfType<Player>();
-        heightPosition = (screenHeight / 2) - (reloadTexture.height/2);
-        widthPosition = (screenWidth / 2) - (reloadTexture.width / 2);
+        user = GetComponent<Player>();
+
+		UpdateGUIPosition();
         reloadTextPosition = new Rect(widthPosition, heightPosition, reloadTexture.width, reloadTexture.height);
     }
 
+	void UpdateGUIPosition()
+	{
+		screenWidth = Screen.width;
+		screenHeight = Screen.height;
+		heightPosition = screenHeight - (reloadTexture.height + (reloadTexture.height/2));
+		widthPosition = (screenWidth / 2) - (reloadTexture.width / 2);
+		if(user == Player.player1)
+		{
+			widthPosition -= reloadTexture.width;
+		}
+		else if(user == Player.player2)
+		{
+			widthPosition += reloadTexture.width;
+		}
+	}
+
     void Update()
-    {
-        if (user.getWeapon().clipRemaining == 0)
+	{
+		UpdateGUIPosition();
+        if (user.getWeapon().clipRemaining == 0 && user.tracked)
         {
             showReloadTexture();
         }

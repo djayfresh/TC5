@@ -14,7 +14,7 @@ public class PlayerHealthScript : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        gameUser = FindObjectOfType<Player>();
+		gameUser = Player.player1;
         playerHealthRemaining = gameUser.health;
 		screenWidth = Screen.width;
 		screenHeight = Screen.height;

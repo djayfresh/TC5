@@ -7,24 +7,31 @@ using System;
 
 public class ShootingController : MonoBehaviour 
 {
-	public ControllerKinect kinect;
-
 	private Weapon weapon;
 	private ReticleMovement crosshairs;
 	private float timeFromlastShot = 0;
 	public bool canShoot = true;
-    private SoundManager soundManager;
     public ParticleEmitter enemyHitEffect;
     public ParticleEmitter enemyMissEffect;
 	private bool triggerHeld = false;
+	private Player thisPlayer;
 	public WeaponChangeText showPistol;
+
 	// Use this for initialization
 	void Start () 
 	{
 		ControllerKinect.playerHandInPhiz += handInPhiz;
+		ControllerKinect.playerHandLeftPhiz += handLeftPhiz;
 		WaitScript.onTextShow += shooting;
-		crosshairs = FindObjectOfType<ReticleMovement>();
-		soundManager = FindObjectOfType<SoundManager>();
+		thisPlayer = GetComponent<Player>();
+	}
+
+	void handLeftPhiz (Player player, Body body, JointType hand)
+	{
+		if(crosshairs != null && player.Equals(thisPlayer))
+		{
+			crosshairs.showCrosshair(false);
+		}
 	}
 	public void enableShooting()
 	{
@@ -42,6 +49,11 @@ public class ShootingController : MonoBehaviour
 
 	void Update () 
 	{
+		if(thisPlayer != null)
+		{
+			weapon = thisPlayer.getWeapon();
+			crosshairs = thisPlayer.GetComponent<ReticleMovement>();
+		}
 		if(Input.GetButtonDown("Fire1"))
 		{
 			triggerHeld = true;
@@ -50,73 +62,81 @@ public class ShootingController : MonoBehaviour
 		{
 			triggerHeld = false;
 		}
-		Player player = FindObjectOfType<Player>();
-		if(player != null)
-		{
-			weapon = player.getWeapon();
-		}
-		if (triggerHeld && weapon != null && timeFromlastShot > weapon.fireRate && weapon.clipRemaining > 0 && canShoot)
-	    {
-			fireWeapon();
-	    }
-		else if(triggerHeld && weapon != null && timeFromlastShot > weapon.fireRate && weapon.clipRemaining <= 0 && canShoot)
-		{
-			soundManager.playDryFire();
-			timeFromlastShot = 0;
-		}
 
-		if(weapon != null && weapon.outOfAmmo())
+		if(GameController.controller.debugMouse && thisPlayer.tracked)
 		{
-			player.changeWeapon();
-			if(player.currentWeapon == 0 && player.getWeapon().Ammo == Weapon.INFINITE_AMMO && showPistol != null)
+			crosshairs.showCrosshair(true);
+			if (triggerHeld && weapon != null && timeFromlastShot > weapon.fireRate && weapon.clipRemaining > 0 && canShoot)
+		    {
+				fireWeapon();
+		    }
+			else if(triggerHeld && weapon != null && timeFromlastShot > weapon.fireRate && weapon.clipRemaining <= 0 && canShoot)
 			{
-				showPistol.showWaitTexture();
+				SoundManager.playDryFire();
+				timeFromlastShot = 0;
 			}
-			timeFromlastShot = 0;
+
+			if(weapon != null && weapon.outOfAmmo() && thisPlayer != null)
+			{
+				thisPlayer.changeWeapon();
+				if(thisPlayer.currentWeapon == 0 && thisPlayer.getWeapon().Ammo == Weapon.INFINITE_AMMO && showPistol != null)
+				{
+					showPistol.showWaitTexture();
+				}
+				timeFromlastShot = 0;
+			}
 		}
 
 		timeFromlastShot += Time.deltaTime;
 
 	}
 
-	void handInPhiz(Body body, JointType type, Vector2 p)
+	void handInPhiz(Player shootingPlayer, Body body, JointType type, Vector2 p)
 	{
-		bool handOpen = false;
-		if(type == JointType.HandRight)
+		if(shootingPlayer.Equals(thisPlayer))
 		{
-			handOpen = body.HandRightState.Equals(HandState.Open);
-		}
-		else 
-		{
-			handOpen = body.HandLeftState.Equals(HandState.Open);
-		}
-		var crosshairsPosition = new Vector3 (p.x * Screen.width, p.y * Screen.height, 0);
-		if(crosshairs != null)
-		{
-			crosshairs.setPosition(new Vector2(crosshairsPosition.x, crosshairsPosition.y));
-		}
-		if (weapon != null && handOpen && timeFromlastShot > weapon.fireRate && weapon.clipRemaining > 0) 
-		{
-			if(canShoot)
+			weapon = shootingPlayer.getWeapon();
+			if(crosshairs != null)
 			{
-				fireWeapon();
+				crosshairs.showCrosshair(thisPlayer.tracked);
 			}
-		}
-		if(weapon != null && handOpen && timeFromlastShot > weapon.fireRate && weapon.clipRemaining <= 0)
-		{
-			if(canShoot)
+			bool handOpen = false;
+			if(type == JointType.HandRight)
 			{
-				soundManager.playDryFire();
-				timeFromlastShot = 0;	
+				handOpen = body.HandRightState.Equals(HandState.Open);
 			}
-		}
+			else 
+			{
+				handOpen = body.HandLeftState.Equals(HandState.Open);
+			}
+			var crosshairsPosition = new Vector3 (p.x * Screen.width, p.y * Screen.height, 0);
+			if(crosshairs != null)
+			{
+				crosshairs.setPosition(new Vector2(crosshairsPosition.x, crosshairsPosition.y));
+			}
+			if (weapon != null && handOpen && timeFromlastShot > weapon.fireRate && weapon.clipRemaining > 0) 
+			{
+				if(canShoot)
+				{
+					fireWeapon();
+				}
+			}
+			if(weapon != null && handOpen && timeFromlastShot > weapon.fireRate && weapon.clipRemaining <= 0)
+			{
+				if(canShoot)
+				{
+					SoundManager.playDryFire();
+					timeFromlastShot = 0;	
+				}
+			}
 
-		if(!handOpen)
-		{
-			if(weapon != null)
-				timeFromlastShot = weapon.fireRate + 1;
-			else
-				timeFromlastShot = 0;
+			if(!handOpen)
+			{
+				if(weapon != null)
+					timeFromlastShot = weapon.fireRate + 1;
+				else
+					timeFromlastShot = 0;
+			}
 		}
 	}
 
@@ -127,7 +147,7 @@ public class ShootingController : MonoBehaviour
 		fireExplosion(Camera.main.ScreenToWorldPoint(crosshairs.getScreenPositionCentered()), (bulletDirection));
 		weapon.clipRemaining--;
 		timeFromlastShot = 0;
-		soundManager.playPistolSound();
+		SoundManager.play(3);
 	}
 
 	void fireExplosion(Vector3 origin, Vector3 direction)
@@ -147,10 +167,13 @@ public class ShootingController : MonoBehaviour
 	            e = rays[r].collider.GetComponent<Actor>();
 	        }
 	    }
-	    hitEnemy(e, weapon.bullet.damage);
-		if(checkForHeadShot(e as Enemy, collider))
+		if(weapon.bullet != null)
 		{
-			hitEnemy(e, weapon.bullet.damage * weapon.headShotMultiplier);
+		    hitEnemy(e, weapon.bullet.damage);
+			if(checkForHeadShot(e as Enemy, collider))
+			{
+				hitEnemy(e, weapon.bullet.damage * weapon.headShotMultiplier);
+			}
 		}
 	    Vector3 backVector = Vector3.Normalize(-direction);
 	    float distBack = 0;
@@ -179,11 +202,10 @@ public class ShootingController : MonoBehaviour
 	{		
 		if(e != null)
 		{
-			Player player = FindObjectOfType<Player>();
-			if(player != null)
+			if(thisPlayer != null)
 			{
-				player.hitEnemy();
-				player.getAccuracy();
+				thisPlayer.hitEnemy();
+				thisPlayer.getAccuracy();
 			}
 			e.ApplyDamage(damage);
 		}
@@ -198,10 +220,9 @@ public class ShootingController : MonoBehaviour
 				//Play better animation
 				//Explosion
 				//Sound
-				Player player = FindObjectOfType<Player>();
-				if(player != null)
+				if(thisPlayer != null)
 				{
-					player.headShot();
+					thisPlayer.headShot();
 				}
 				Debug.Log("HEAD SHOT!");
 				//enemy.OnDeath();
@@ -214,6 +235,7 @@ public class ShootingController : MonoBehaviour
 	void OnDestroy()
 	{
 		ControllerKinect.playerHandInPhiz -= handInPhiz;
+		ControllerKinect.playerHandLeftPhiz -= handLeftPhiz;
 		WaitScript.onTextShow -= shooting;
 	}
 }

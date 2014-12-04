@@ -2,14 +2,15 @@
 using System.Collections;
 
 public class WeaponChangeText : MonoBehaviour {
+	
+	public delegate void WeaponChangeActive(bool show);
+	public static event WeaponChangeActive onTextShow;
 
 	private float heightPosition;
 	private float widthPosition;
 	private Rect waitPosition;
 	private bool displayWeaponChange = false;
 	private ShootingController userFireController;
-	public delegate void WeaponChangeActive(bool show);
-	public static event WeaponChangeActive onTextShow;
 
 	public float weaponChangeShowTime;
 	private float weaponChangedTime;
@@ -64,10 +65,8 @@ public class WeaponChangeText : MonoBehaviour {
 			}
 			myStyle.fontSize = Screen.height / 10;
 			myStyle.normal.textColor = Color.red;
-			
-			heightPosition = Screen.height - (Screen.height / 2);
-			widthPosition = (Screen.width / 2) - ((weaponText.Length/2) * (myStyle.fontSize/2));
-			waitPosition = new Rect(widthPosition, heightPosition,widthPosition, Screen.height/6);
+
+			waitPosition = new Rect(0, 0,Screen.width, Screen.height);
 			GUI.Label(waitPosition, weaponText, myStyle);
 		}
 	}

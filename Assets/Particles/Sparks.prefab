@@ -25,7 +25,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -20.948, y: 6.71159983, z: -4.58430004}
+  m_LocalPosition: {x: 2.26291704, y: 4.10639715, z: -17.0710297}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -59,7 +59,7 @@ ParticleAnimator:
   force: {x: 0, y: -6, z: 0}
   damping: 1
   stopSimulation: 0
-  autodestruct: 0
+  autodestruct: 1
 --- !u!15 &1500000
 EllipsoidParticleEmitter:
   m_ObjectHideFlags: 1
@@ -68,7 +68,7 @@ EllipsoidParticleEmitter:
   m_GameObject: {fileID: 100000}
   serializedVersion: 2
   m_Enabled: 1
-  m_Emit: 1
+  m_Emit: 0
   minSize: .00999999978
   maxSize: .100000001
   minEnergy: 0
@@ -82,8 +82,8 @@ EllipsoidParticleEmitter:
   tangentVelocity: {x: 0, y: 0, z: 0}
   angularVelocity: 0
   rndAngularVelocity: 0
-  rndRotation: 0
-  Simulate in Worldspace?: 0
+  rndRotation: 1
+  Simulate in Worldspace?: 1
   m_OneShot: 1
   m_Ellipsoid: {x: .00100000005, y: .00100000005, z: .00100000005}
   m_MinEmitterRange: 0

@@ -19,7 +19,7 @@ public class gameOverOptionsScript : MonoBehaviour {
     void OnGUI()
     {
         GUI.depth = 2; //smaller the closer to camera
-        if (gameUser.LivesLeft > 0)
+        if (GameController.controller.victory)
         {
             GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), winTexture, ScaleMode.StretchToFill, true);
         }

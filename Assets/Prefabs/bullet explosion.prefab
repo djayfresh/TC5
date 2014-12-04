@@ -69,15 +69,15 @@ EllipsoidParticleEmitter:
   serializedVersion: 2
   m_Enabled: 1
   m_Emit: 0
-  minSize: .5
-  maxSize: .5
+  minSize: 1
+  maxSize: 2
   minEnergy: .100000001
-  maxEnergy: .400000006
-  minEmission: 200
-  maxEmission: 200
+  maxEnergy: .300000012
+  minEmission: 5
+  maxEmission: 5
   worldVelocity: {x: 0, y: 0, z: 0}
   localVelocity: {x: 0, y: 0, z: 0}
-  rndVelocity: {x: 5, y: 5, z: 5}
+  rndVelocity: {x: 5, y: 7, z: 5}
   emitterVelocityScale: 0
   tangentVelocity: {x: 0, y: 0, z: 0}
   angularVelocity: 0
@@ -85,7 +85,7 @@ EllipsoidParticleEmitter:
   rndRotation: 1
   Simulate in Worldspace?: 1
   m_OneShot: 1
-  m_Ellipsoid: {x: .00999999978, y: .00999999978, z: .0500000007}
+  m_Ellipsoid: {x: .200000003, y: .100000001, z: .0500000007}
   m_MinEmitterRange: 10
 --- !u!26 &2600000
 ParticleRenderer:
@@ -99,7 +99,7 @@ ParticleRenderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 98f84fbcb82660242b3dcfbf0990454d, type: 2}
+  - {fileID: 2100000, guid: bc332dcd042acf34fb7b2d662a4a35e9, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0

@@ -14,13 +14,16 @@ public class Weapon : MonoBehaviour
     public int clipRemaining;
 	public float headShotMultiplier = 2;
 
-	protected float activeLength = 1;
-	protected float flashLength = .5f;
+	protected float activeLength = 0.5f;
+	protected float flashLength = 1.0f;
 
 	public void Start()
 	{
 		initalAmmo = Ammo;
-		muzzleFlash.SetActive (false);
+		if(muzzleFlash != null)
+		{
+			muzzleFlash.SetActive(false);
+		}
 		reload();
 	}
 
@@ -31,7 +34,10 @@ public class Weapon : MonoBehaviour
 	public void Update()
 	{
 		activeLength += Time.deltaTime;
-		muzzleFlash.SetActive (activeLength < flashLength);
+		if(muzzleFlash != null)
+		{
+			muzzleFlash.SetActive(activeLength < flashLength);
+		}
 	}
 
 	public void reload()
@@ -56,8 +62,7 @@ public class Weapon : MonoBehaviour
 
 	public void showFlash()
 	{
-		if(muzzleFlash != null)
-			activeLength = 0;
+		activeLength = 0;
 	}
 }
 

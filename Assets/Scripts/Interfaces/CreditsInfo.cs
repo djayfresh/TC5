@@ -7,7 +7,7 @@ public class CreditsInfo : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		si = FindObjectOfType<SceneInfo> ();
+		si = SceneInfo.info;
 		Debug.Log ("Accuracy: " + si.Accuracy);
 		Debug.Log ("Score: " + si.Score);
 		Debug.Log ("Lives Left: " + si.LivesLeft);

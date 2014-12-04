@@ -3,20 +3,29 @@ using System.Collections;
 
 public class ReticleMovement : MonoBehaviour
 {
-	public ControllerKinect kinect;
-	public bool debugMouse = false;
 	public float marginOfError = .05f;
 	private Vector2 localPositon;
 	private Vector2 positonCenter;
 	public Texture crosshair;
+	public Texture crosshair2;
 	public float scaleFactor = 1.0f;
-	private bool shouldShowCrosshair = true;
+	private bool shouldShowCrosshair = false;
+	private bool waitTextShown = false;
 	// Use this for initialization
 	void Start()
 	{
 		Screen.showCursor = false;
-		WaitScript.onTextShow += showCrosshair;
+		WaitScript.onTextShow += negateShowCrosshair;
+		if(!GetComponent<Player>().Equals(Player.player1))
+		{
+			crosshair = crosshair2;
+		}
 		updatePositionCenter();
+	}
+
+	void negateShowCrosshair(bool WaitTextVisibility)
+	{
+		waitTextShown = WaitTextVisibility;
 	}
 
 	public void hideCrosshair()
@@ -29,9 +38,9 @@ public class ReticleMovement : MonoBehaviour
 		shouldShowCrosshair = true;
 	}
 
-	void showCrosshair(bool enable)
+	public void showCrosshair(bool enable)
 	{
-		shouldShowCrosshair = !enable;
+		shouldShowCrosshair = enable;
 	}
 
 	public void setPosition(Vector2 pos)
@@ -53,32 +62,24 @@ public class ReticleMovement : MonoBehaviour
 	{
 		updatePositionCenter();
 
-		if(Input.GetKeyDown(KeyCode.BackQuote))
-			debugMouse = !debugMouse;
-
 		Vector2 position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-		if (kinect.getSensor() == null) {
+		if(GameController.controller.debugMouse)
+		{
 			setPosition(position);
-		}
-		else{ 
-			if(debugMouse)
-			{
-				setPosition(position);
-			}
 		}
 	}
 
 	void OnGUI()
 	{
-		if(shouldShowCrosshair)
+		if(shouldShowCrosshair && !waitTextShown)
 		{
 			GUI.depth = 0;
-			GUI.DrawTexture(new Rect(localPositon.x - positonCenter.x/2, Screen.height - (localPositon.y+(positonCenter.y/2)), positonCenter.x, positonCenter.y), crosshair, ScaleMode.StretchToFill, true);
+			GUI.DrawTexture(new Rect(localPositon.x - positonCenter.x/2, Screen.height - (localPositon.y+(positonCenter.y/2)), positonCenter.x, positonCenter.y), crosshair, ScaleMode.StretchToFill);
 		}
 	}
 
 	void OnDestroy()
 	{
-		WaitScript.onTextShow -= showCrosshair;
+		WaitScript.onTextShow -= negateShowCrosshair;
 	}
 }

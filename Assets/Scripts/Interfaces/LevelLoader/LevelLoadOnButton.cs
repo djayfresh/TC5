@@ -9,6 +9,7 @@ public class LevelLoadOnButton : LevelLoader {
 		MenuButton.OnButtonPress += buttonFired;
 	}
 
+
 	void buttonFired(MenuButton button)
 	{
 		if(buttonAction.Equals(button))
@@ -24,17 +25,8 @@ public class LevelLoadOnButton : LevelLoader {
 
 	public override void loadLevel()
 	{
-		if(levelName.Length == 0 && levelNumber >= 0)
-		{
-			Application.LoadLevel(levelNumber);
-		}
-		else if(levelName.Length > 0)
-		{
-			Application.LoadLevel(levelName);
-		}
-		else
-		{
-			Debug.LogError("Level Failed to load");
-		}
+		GameController.controller.nextLevel = levelNumber;
+		Debug.Log("Loading screen load");
+		Application.LoadLevel(5);
 	}
 }

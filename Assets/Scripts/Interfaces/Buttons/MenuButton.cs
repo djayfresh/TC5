@@ -16,6 +16,7 @@ public class MenuButton : MonoBehaviour {
 	protected Rect screenButton;
 	protected float buttonCountDown;
 	protected bool buttonHeld = false;
+
 	void Start () {
 		scaleButton();
 	}
@@ -36,6 +37,11 @@ public class MenuButton : MonoBehaviour {
 	void Update () 
 	{
 		updateButtonState();
+
+		if(Input.GetKeyDown(KeyCode.RightArrow)) 
+		{
+			Application.LoadLevel(GameController.controller.nextLevel);
+		}
 	}
 
 	protected virtual void updateButtonState()
@@ -60,7 +66,6 @@ public class MenuButton : MonoBehaviour {
 		{
 			Debug.Log("Button Countdown");
 			fireEvent();
-			buttonCountDown = countDownTime;
 		}
 	}
 
@@ -80,25 +85,59 @@ public class MenuButton : MonoBehaviour {
 
 	void OnGUI()
 	{
-		GUI.depth = 1;
 
-		GUIStyle myStyle = new GUIStyle();
-		myStyle.alignment = TextAnchor.MiddleCenter;
-		myStyle.fontSize = (int)screenButton.height;
-		myStyle.normal.textColor = Color.white;
 
-		GUI.DrawTexture(screenButton, buttonTexture, ScaleMode.StretchToFill, false);
-
-		GUIStyle menuButtonLabelStyle = GUI.skin.GetStyle("Label");
-		menuButtonLabelStyle.alignment = TextAnchor.MiddleCenter;
-		menuButtonLabelStyle.fontSize = (int)screenButton.height;
-		menuButtonLabelStyle.normal.textColor = Color.black;
-		
-		GUI.Label(screenButton, label, menuButtonLabelStyle);
-	
-		if(buttonHeld)
+		if (label.Equals ("Next Level")) 
 		{
-			GUI.Label(screenButton, String.Format("{0:0.}", buttonCountDown), myStyle);
+			if(GameController.controller.victory)
+			{
+
+				GUI.depth = 1;
+				
+				GUIStyle myStyle = new GUIStyle();
+				myStyle.alignment = TextAnchor.MiddleCenter;
+				myStyle.fontSize = (int)screenButton.height;
+				myStyle.normal.textColor = Color.white;
+				
+				GUI.DrawTexture(screenButton, buttonTexture, ScaleMode.StretchToFill, false);
+				
+				GUIStyle menuButtonLabelStyle = GUI.skin.GetStyle("Label");
+				menuButtonLabelStyle.alignment = TextAnchor.MiddleCenter;
+				menuButtonLabelStyle.fontSize = ((int)screenButton.height/(label.Length/2)) + label.Length;
+				menuButtonLabelStyle.normal.textColor = Color.black;
+				
+				GUI.Label (screenButton, label, menuButtonLabelStyle);
+				
+				if(buttonHeld)
+				{
+					GUI.Label(screenButton, String.Format("{0:0.}", buttonCountDown), myStyle);
+				}
+			}
+		} 
+		else 
+		{
+			GUI.depth = 1;
+			
+			GUIStyle myStyle = new GUIStyle();
+			myStyle.alignment = TextAnchor.MiddleCenter;
+			myStyle.fontSize = (int)screenButton.height;
+			myStyle.normal.textColor = Color.white;
+			
+			GUI.DrawTexture(screenButton, buttonTexture, ScaleMode.StretchToFill, false);
+			
+			GUIStyle menuButtonLabelStyle = GUI.skin.GetStyle("Label");
+			menuButtonLabelStyle.alignment = TextAnchor.MiddleCenter;
+			menuButtonLabelStyle.fontSize = ((int)screenButton.height/(label.Length/2)) + label.Length;
+			menuButtonLabelStyle.normal.textColor = Color.black;
+
+			GUI.Label (screenButton, label, menuButtonLabelStyle);
+
+			if(buttonHeld)
+			{
+				GUI.Label(screenButton, String.Format("{0:0.}", buttonCountDown), myStyle);
+			}
 		}
+	
+
 	}
 }

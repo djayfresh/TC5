@@ -12,26 +12,24 @@ public class Enemy : Actor
 	protected Vector3 lastFramePosition;
 	protected float timefromLastShot;
 
-	protected GameObject player;
-
 	protected bool bulletInc = false;
 	protected float bulletTimer = 0;
 	protected float coverTimer = 0;
 	protected MoveToFrom mtf;
-	protected Player playerClass;
-	protected SoundManager sm;
 	protected BoxCollider headCollider;
 	protected Transform HealthBar;
-	// Use this for initialization
+
+	protected bool canCover;
+	protected float timeToCover;
+	protected float inCoverTimer;
 	void Start () 
 	{
 		maxHealth = health;
 		Cover.OnCover += OnCover;
 		Cover.OnExitCover += OnExit;
 		mtf = GetComponent<MoveToFrom> ();
-		player = Camera.main.gameObject;
-		playerClass = player.GetComponent<Player> ();
-		sm = FindObjectOfType<SoundManager> ();
+
+		timeToCover = Random.Range (2, 5);
 
 		foreach(Transform t in transform)
 		{
@@ -58,7 +56,6 @@ public class Enemy : Actor
 					headCollider = c;
 				}
 			}
-			Debug.Log("Found Head: " + (headCollider.center * 1000));
 		}
 	}
 	float newRandomFloat ()
@@ -66,12 +63,12 @@ public class Enemy : Actor
 		return (Random.value - 0.5f) * weapon.spread;
 	}
 
-	void OnCover(Cover c)
+	void OnCover(Player player, Cover c)
 	{
 		coverTimer = 0;
 	}
 
-	void OnExit(Cover c)
+	void OnExit(Player Player, Cover c)
 	{
 		if(bulletInc && coverTimer < bulletHandicap)
 		{
@@ -84,26 +81,37 @@ public class Enemy : Actor
 	// Update is called once per frame
 	void Update () 
 	{
-		if(health != maxHealth)
+		if(mtf != null)
+		{
+			canCover = mtf.canCover ();
+		}
+		if(canCover && timeToCover < inCoverTimer)
+		{
+			if(inCover)
+				leaveCover();
+			else
+				goIntoCover();
+			inCoverTimer = 0;
+		}
+		inCoverTimer += Time.deltaTime;
+		if(health != maxHealth && HealthBar != null)
 			HealthBar.localScale = new Vector3(0.0033f * health/maxHealth,.0033f,.0033f);
 		
 		if(weapon != null && weapon.bullet != null)
 		{
-
 			shouldShoot = mtf.shouldShoot ();
-			Vector3 playerPosition = player.transform.position;
+			Vector3 playerPosition = Camera.main.transform.position;
 
 			if(timefromLastShot > weapon.fireRate && shouldShoot && mtf.hasMoved())
 			{
 				timefromLastShot = 0;
 				Vector3 randomVector = new Vector3(newRandomFloat (), newRandomFloat(), newRandomFloat());
-				//Vector3 randomVector = new Vector3(0, 0, 0);
 
 				float dist = Vector3.Distance(randomVector, Vector3.zero);
 				if(dist < Random.value && 
 				   !Physics.Linecast(weapon.transform.position + transform.forward, playerPosition - transform.forward) && !bulletInc)
 				{
-					sm.playEnemyFire();
+					SoundManager.playEnemyFire();
 					weapon.showFlash();
 					bulletInc = true;
 				}
@@ -119,9 +127,13 @@ public class Enemy : Actor
 				if(bulletTimer <= 0)
 				{
 					bulletInc = false;
-					if(playerClass != null)
+					if(Player.player1 != null)
 					{
-						playerClass.SendMessage("ApplyDamage",weapon.bullet.damage,SendMessageOptions.DontRequireReceiver);
+						Player.player1.SendMessage("ApplyDamage",weapon.bullet.damage,SendMessageOptions.RequireReceiver);
+					}
+					if(Player.player2 != null)
+					{
+						Player.player2.SendMessage("ApplyDamage",weapon.bullet.damage,SendMessageOptions.RequireReceiver);
 					}
 				}
 			}
@@ -132,7 +144,16 @@ public class Enemy : Actor
 		}
 		timefromLastShot += Time.deltaTime;
 	}
-
+	private void goIntoCover()
+	{
+		inCover = true;
+		transform.position -= new Vector3 (0, 5, 0);
+	}
+	private void leaveCover()
+	{
+		inCover = false;
+		transform.position += new Vector3 (0, 5, 0);
+	}
 	bool hasMoved()
 	{
 		bool moved = lastFramePosition != transform.position;
@@ -151,9 +172,9 @@ public class Enemy : Actor
 
 	public override void OnDeath()
 	{
-		playerClass.score++;
+		GameController.controller.score++;
 
-		sm.playEnemyDeath ();
+		SoundManager.playEnemyDeath ();
 		//Debug.Log("Score: " + playerClass.score);
 		Destroy(this.gameObject);
 	}

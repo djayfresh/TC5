@@ -47,11 +47,23 @@ public class MoveToFrom : MonoBehaviour {
 		PathNode tmp;
 		for(int i = 0; i < (path.Length - 1)/2; i++)
 		{
-			tmp = path[i];
-			path[i] = path[path.Length - i];
-			path[path.Length - i] = tmp;
+			if( path.Length - i >= 0 && path.Length - i < path.Length)
+			{
+				tmp = path[i];
+				path[i] = path[path.Length - i];
+				path[path.Length - i] = tmp;
+			}
+			else
+				currentNode = 0;
+
+			Debug.Log("Looping...");
 		}
-		currentNode = path.Length - currentNode;
+		if(path.Length - currentNode >= 0)
+			currentNode = path.Length - currentNode;
+		else
+			currentNode = 0;
+
+		Debug.Log (currentNode);
 	}
 
 	void TriggerActive(ActionTrigger e)
@@ -93,7 +105,7 @@ public class MoveToFrom : MonoBehaviour {
 			{
 				transform.position = Vector3.MoveTowards (transform.position, pos, Time.deltaTime * path[currentNode].lerpSpeed);
 					//transform.position = Vector3.Lerp(initalPos, pos, lerpTime);
-				if(!trackPlayer)
+				if(!trackPlayer && path.Length > 0)
 				{
 					transform.LookAt(pos);
 				}
@@ -126,7 +138,17 @@ public class MoveToFrom : MonoBehaviour {
 		else
 			return path [currentNode - 1].shouldShoot;
 	}
-	void OnDestory()
+	public bool canCover()
+	{
+		if (path.Length < currentNode)
+			return path [currentNode].canCover;
+		else if (currentNode > 0)
+			return path [currentNode - 1].canCover;
+		else
+			return false;
+			
+	}
+	void OnDestroy()
 	{
 		ActionTrigger.OnTrigger -= TriggerActive;
 	}

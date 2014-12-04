@@ -23,4 +23,9 @@ public class WeaponShooter : MonoBehaviour {
 			Destroy(this.gameObject);
 		}
 	}
+
+	void OnDestroy()
+	{
+		DestroyTrigger.OnTrigger -= HandleOnTrigger;
+	}
 }

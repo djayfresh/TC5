@@ -14,7 +14,7 @@ public class AccuracyCount : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-		gameUser = FindObjectOfType<SceneInfo>();
+		gameUser = SceneInfo.info;
 		if(gameUser == null)
 		{
 			gameUser = new SceneInfo() {Accuracy = -9001, LivesLeft = 9001, Score = -11};
